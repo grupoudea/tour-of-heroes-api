@@ -1,4 +1,4 @@
-package com.example.tourofheroesapi;
+package co.edu.udea.tourofheroesapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
