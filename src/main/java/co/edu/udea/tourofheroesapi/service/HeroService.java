@@ -1,5 +1,9 @@
 package co.edu.udea.tourofheroesapi.service;
 
+import co.edu.udea.tourofheroesapi.exception.DataConstraintViolationException;
+import co.edu.udea.tourofheroesapi.exception.DataDuplicatedException;
+import co.edu.udea.tourofheroesapi.exception.DataNotFoundException;
+import co.edu.udea.tourofheroesapi.exception.LocalObjectNotFoundException;
 import co.edu.udea.tourofheroesapi.model.Hero;
 import co.edu.udea.tourofheroesapi.repository.HeroRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -8,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,37 +24,48 @@ public class HeroService {
 
     public Hero findById(Integer id) {
         if (Objects.isNull(id)) {
-            System.out.println("id null");
+            throw new LocalObjectNotFoundException("ex.hero.object_not_found");
         }
-        return heroRepository.findById(id).orElseThrow(()-> new RuntimeException("DATA_NOT_FOUND"));
+        return heroRepository.findById(id).orElseThrow(()-> new DataNotFoundException("ex.data_not_found"));
     }
 
     public List<Hero> findAll(){
 
         var heroList = heroRepository.findAll();
         if (heroList.isEmpty()) {
-            System.out.printf("EMpty list");
+            throw new DataNotFoundException("ex.hero.data_not_found");
         }
         return heroList;
 
     }
 
     public Hero createHero(Hero hero) {
-
         if (Objects.nonNull(hero.getId())) {
-            Optional<Hero> heroOptional = heroRepository.findById(hero.getId());
+            var heroOptional = heroRepository.findById(hero.getId());
             if (heroOptional.isPresent()) {
-                System.out.println("throw ex data duplicate");
+                throw new DataDuplicatedException("ex.hero.data_duplicated");
             }
         }
 
         try {
             return heroRepository.save(hero);
         } catch (DataIntegrityViolationException e) {
-            System.out.println("throw data constraint violation ex");
-
+            throw new DataConstraintViolationException("ex.hero.data_constraint_violation");
         }
-        return new Hero();
+    }
+
+    public Hero updateHero(Hero hero) {
+        if (Objects.isNull(hero.getId())){
+            throw new LocalObjectNotFoundException("ex.hero.object_not_found");
+        }
+
+        var heroTransaction = heroRepository.findById(hero.getId())
+                .orElseThrow(() -> new DataNotFoundException("ex.hero.data_not_found") );
+
+        heroTransaction.setName(hero.getName());
+
+        return heroTransaction;
+
     }
 
 
