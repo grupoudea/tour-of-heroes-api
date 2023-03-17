@@ -30,6 +30,12 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 }
 
+tasks {
+    bootJar {
+        archiveFileName.set("tour-of-heroes-api.jar")
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
