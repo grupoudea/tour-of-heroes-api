@@ -175,6 +175,24 @@ class HeroServiceTests {
         assertEquals("Iron man" , result.getName());
     }
 
+    @Test
+    public void testDeleteHeroSuccess() {
+
+        // Arrange = preparar datos de prueba
+        hero = new Hero();
+        hero.setId(1);
+        hero.setName("Iron man");
+        Mockito.when(heroRepository.findById(anyInt())).thenReturn(Optional.of(hero));
+        Mockito.doNothing().when(heroRepository).deleteById(anyInt());
+
+        // Act = ejecuta prueba
+        heroService.deleteHero(hero.getId());
+
+        // Assert = validaciones que quiero
+        Mockito.verify(heroRepository, Mockito.times(1)).deleteById(Mockito.anyInt());
+
+    }
+
 
 
 

@@ -68,5 +68,16 @@ public class HeroService {
 
     }
 
+    public void deleteHero(Integer heroId) {
+        if(Objects.nonNull(heroId)) {
+            var heroOptional = heroRepository.findById(heroId);
+            if (!heroOptional.isPresent()) {
+                throw new DataNotFoundException("ex.hero.data_not_found");
+            }
+        }
+
+        heroRepository.deleteById(heroId);
+    }
+
 
 }
