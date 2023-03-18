@@ -1,5 +1,5 @@
 echo "Starting..."
-pwd
+# definimos variables.
 IMAGE_NAME="tour-of-heroes-api-i"
 CONTAINER_NAME="$IMAGE_NAME-con"
 

@@ -1,6 +1,122 @@
+# Dockerizar y desplegar en AWS ECS API REST spring boot usando Github Actions
 
+## Paso 1: dockerizar 
 
-docker run -e PASS_DB=${MY_PASS_DB} -e USER_DB=${MY_USER_DB} -e HOST_DB=${MY_HOST_DB} --name tour-of-heroes-api-i-con -d -p 8080:8080 tour-of-heroes-api-i:latest
+### Forma 1:
 
+Crear un archivo Dockerfile como el siguiente: 
 
+```bash
+# la imagen base será desde alpine (es una imagen linux livina)
+FROM adoptopenjdk/openjdk11:alpine-jre
+
+# creamos un argumento con el valor de la ruta donde se crea nuestro .jar
+ARG JAR_FILE=./build/libs/tour-of-heroes-api.jar
+
+# cd /op/app
+WORKDIR /opt/app
+
+# copiamos el o los archivos, en este caso nuestro jar lo copiamos en /opt/app
+COPY ${JAR_FILE} "app.jar"
+
+# así arrancará nuestro container
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+ya tenemos nuestro Dockerfile, ahora construyamos la imagen:
+
+```bash
+# el punto (.) al final indica que en el directorio actual está el Dockerfile con el que haremos el build.
 docker build --tag tour-of-heroes-api-i .
+```
+
+Finalmente podemos iniciar nuestro contenedor:
+
+```bash
+docker run -e PASS_DB=${MY_PASS_DB} -e USER_DB=${MY_USER_DB} -e HOST_DB=${MY_HOST_DB} \
+--name tour-of-heroes-api-i-con -d -p 8080:8080 tour-of-heroes-api-i:latest
+```
+
+Note que al contenedor le paso unas variables de entorno que está definidas como variables de entorno del sistema 
+operativo host. Esas variables de entorno son usadas para la contraseña, usuario y host de la base de datos. 
+Es una forma para evitar exponer las credenciales. 
+
+### Forma 2:
+
+Creamos un archivo Dockerfile igual que el anterior y adicionamos scripts utilitarios que nos agilizaran el desarrollo. 
+Es decir, cada vez que queramos probar una nueva version de la app desde la dockerización tendremos que parar el contenedor,
+removerlo y remover la imagen, compilar el jar, ejecutar nuevamente el build de la imagen. Para evitar hacer esto, creamos
+un script que lo haga. 
+
+*build-docker.sh*
+
+```bash
+echo "Starting..."
+
+# Definimos nuestras variables
+IMAGE_NAME="tour-of-heroes-api-i"
+CONTAINER_NAME="$IMAGE_NAME-con"
+
+echo $IMAGE_NAME
+echo $CONTAINER_NAME
+
+echo "Stoping container $CONTAINER_NAME"
+
+# validamos que la salida del comando docker stop <container-name> sea un error, si lo es, quizá no exista el contenedor
+if docker stop $CONTAINER_NAME 2>&1 | grep -q "No such"; then
+  echo "Error trying stop container $CONTAINER_NAME maybe container does not exist"
+else
+  echo "$CONTAINER_NAME has been stopped. Good job!"
+fi
+
+# validamos que la salida del comando docker rm <container-name> sea un error, si lo es, quizá no exista el contenedor
+echo "Removing container $CONTAINER_NAME"
+if docker rm $CONTAINER_NAME 2>&1 | grep -q "No such"; then
+  echo "Error trying remove container $CONTAINER_NAME maybe container does not exist"
+else
+  echo "$CONTAINER_NAME has been removed. Good job!"
+fi
+
+# validamos que la salida del comando docker rmi <image-name> sea un error, si lo es, quizá no exista la imagen
+echo "Removing image $IMAGE_NAME"
+if docker rmi $IMAGE_NAME 2>&1 | grep -q "No such"; then
+  echo "Error trying remove image $IMAGE_NAME maybe image does not exist"
+else
+  echo "$IMAGE_NAME has been removed. Good job!"
+fi
+
+# compilamos nuestro proyecto para generar el .jar
+./gradlew clean build -x test
+
+
+# construimos la imagen con el Dockerfile
+docker build --tag $IMAGE_NAME .
+```
+
+podemos ejecutar:
+
+```bash
+sh ./scripts/build-docker.sh
+```
+
+
+Ahora, para iniciar nuestro contenedor nos apoyamos en el archivo utilitario:
+
+*docker-start.sh* en **/scripts/docker-start.sh**
+
+que contiene: 
+```bash
+docker run -e PASS_DB=${MY_PASS_DB} -e USER_DB=${MY_USER_DB} -e HOST_DB=${MY_HOST_DB} \
+--name tour-of-heroes-api-i-con -d -p 8080:8080 tour-of-heroes-api-i:latest
+```
+
+podemos ejecutar:
+
+```bash
+sh ./scripts/docker-start.sh
+```
+
+## Paso 2: configurar AWS ECS
+
+## Paso 3: configurar IAM
+
+## Paso 4: github actions
