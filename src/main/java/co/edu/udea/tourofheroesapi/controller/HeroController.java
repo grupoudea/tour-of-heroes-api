@@ -56,6 +56,23 @@ public class HeroController {
         return ResponseEntity.ok(new StandardResponse<>(StandardResponse.StatusStandardResponse.OK, "hero.updated.ok", hero1));
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<StandardResponse<String>> deleteHero(@PathVariable Integer id) {
+        heroService.deleteHero(id);
+        return ResponseEntity.accepted().body(new StandardResponse<>(
+                StandardResponse.StatusStandardResponse.OK,
+                "hero.deleted.ok"
+        ));
+
+    }
+
+    @GetMapping("/search-hero")
+    public ResponseEntity<StandardResponse<List<Hero>>> searchHero(@RequestParam("name") String filter) {
+        var heroList = heroService.searchHero(filter);
+
+        return ResponseEntity.ok(new StandardResponse(StandardResponse.StatusStandardResponse.OK, heroList));
+    }
+
 
 
 }

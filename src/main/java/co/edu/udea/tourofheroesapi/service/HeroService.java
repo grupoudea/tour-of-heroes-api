@@ -79,5 +79,16 @@ public class HeroService {
         heroRepository.deleteById(heroId);
     }
 
+    public List<Hero> searchHero(String filter) {
+
+        if(Objects.isNull(filter)){
+            throw new LocalObjectNotFoundException("ex.hero.object_not_found");
+        }
+        var heroList = heroRepository.findByNameContains(filter);
+
+        return heroList;
+
+    }
+
 
 }
