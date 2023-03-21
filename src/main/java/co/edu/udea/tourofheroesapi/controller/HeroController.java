@@ -32,7 +32,7 @@ public class HeroController {
         return ResponseEntity.ok(hero);
     }
 
-    @GetMapping("/get-heroes")
+    @GetMapping()
     public ResponseEntity<StandardResponse<List<Hero>>> findAll() {
         var heroList = heroService.findAll();
         return ResponseEntity.ok(new StandardResponse(StandardResponse.StatusStandardResponse.OK, heroList));
@@ -66,7 +66,7 @@ public class HeroController {
 
     }
 
-    @GetMapping("/search-hero")
+    @GetMapping("/")
     public ResponseEntity<StandardResponse<List<Hero>>> searchHero(@RequestParam("name") String filter) {
         var heroList = heroService.searchHero(filter);
 
