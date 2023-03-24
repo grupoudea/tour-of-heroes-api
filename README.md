@@ -1,5 +1,20 @@
 # Dockerizar y desplegar en AWS ECS API REST spring boot usando Github Actions
 
+Está rest api se conecta a una base de datos alojada en AWS RDS y su despliegue está automatizado con Github Actions (CI/CD).
+
+Características del repo:
+
+- [x] Lombok - Mapper
+- [x] Manejo de excepciones con spring boot
+- [x] Pruebas unitarias (no todo está cubierto)
+- [x] Conexión con Base de datos (RDS de AWS)
+- [x] Despliegue automatizado con Github Actions hacia ECS
+- [x] Guia para dockerización
+- [ ] Implementación de swagger
+- [ ] Guia para despliegue en ECS
+- [ ] Guia para configurar github actions
+
+url en aws: http://ec2-44-214-2-56.compute-1.amazonaws.com:49153/api/hero
 
 **Contenido**
 
