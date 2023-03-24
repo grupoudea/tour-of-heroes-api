@@ -11,6 +11,6 @@ ENV HOST_DB=${HOST_DB}
 
 
 WORKDIR /opt/app
-COPY ${JAR_FILE} "app.jar"
+ADD ${JAR_FILE} "app.jar"
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
