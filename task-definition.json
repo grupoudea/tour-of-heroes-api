@@ -1,5 +1,5 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:403993234985:task-definition/grupo-udea:1",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:403993234985:task-definition/grupo-udea:2",
   "containerDefinitions": [
     {
       "name": "tour-of-heroes-repo",
@@ -15,20 +15,7 @@
         }
       ],
       "essential": true,
-      "environment": [
-        {
-          "name": "USER_DB",
-          "value": "dev-berracode"
-        },
-        {
-          "name": "HOST_DB",
-          "value": "appuntesdbid.cqgwu6kfqjnq.us-east-1.rds.amazonaws.com"
-        },
-        {
-          "name": "PASS_DB",
-          "value": "dev-berracode2023*"
-        }
-      ],
+      "environment": [],
       "environmentFiles": [],
       "mountPoints": [],
       "volumesFrom": []
@@ -37,7 +24,7 @@
   "family": "grupo-udea",
   "executionRoleArn": "arn:aws:iam::403993234985:role/ecsTaskExecutionRole",
   "networkMode": "bridge",
-  "revision": 1,
+  "revision": 2,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -61,7 +48,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2023-03-24T19:32:30.343Z",
+  "registeredAt": "2023-03-24T21:05:44.542Z",
   "registeredBy": "arn:aws:iam::403993234985:user/guillermo.hernandez",
   "tags": []
 }

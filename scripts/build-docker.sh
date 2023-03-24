@@ -29,4 +29,4 @@ fi
 
 ./gradlew clean build -x test
 
-docker build --tag $IMAGE_NAME .
+docker build --tag $IMAGE_NAME --build-arg PASS_DB=${MY_PASS_DB} --build-arg USER_DB=${MY_USER_DB} --build-arg HOST_DB=${MY_HOST_DB} .
