@@ -1,0 +1,67 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:403993234985:task-definition/grupo-udea:1",
+  "containerDefinitions": [
+    {
+      "name": "tour-of-heroes-repo",
+      "image": "403993234985.dkr.ecr.us-east-1.amazonaws.com/tour-of-heroes-repo",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "8080",
+          "containerPort": 8080,
+          "hostPort": 0,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "USER_DB",
+          "value": "dev-berracode"
+        },
+        {
+          "name": "HOST_DB",
+          "value": "appuntesdbid.cqgwu6kfqjnq.us-east-1.rds.amazonaws.com"
+        },
+        {
+          "name": "PASS_DB",
+          "value": "dev-berracode2023*"
+        }
+      ],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": []
+    }
+  ],
+  "family": "grupo-udea",
+  "executionRoleArn": "arn:aws:iam::403993234985:role/ecsTaskExecutionRole",
+  "networkMode": "bridge",
+  "revision": 1,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2"
+  ],
+  "requiresCompatibilities": [
+    "EC2"
+  ],
+  "cpu": "1024",
+  "memory": "1024",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "registeredAt": "2023-03-24T19:32:30.343Z",
+  "registeredBy": "arn:aws:iam::403993234985:user/guillermo.hernandez",
+  "tags": []
+}
