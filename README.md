@@ -1,6 +1,6 @@
 # Dockerizar y desplegar en AWS ECS API REST spring boot usando Github Actions
 
-Está rest api se conecta a una base de datos alojada en AWS RDS y su despliegue está automatizado con Github Actions (CI/CD).
+Está REST api se conecta a una base de datos alojada en AWS RDS y su despliegue está automatizado con Github Actions (CI/CD).
 
 Características del repo:
 
@@ -16,6 +16,8 @@ Características del repo:
 
 url en aws: http://ec2-44-214-2-56.compute-1.amazonaws.com:49153/api/hero
 
+
+# Guias para lograr despliegue en ECS con GitHub Actions
 **Contenido**
 
 1. [Endpoints](#id1)
@@ -52,14 +54,14 @@ ya tenemos nuestro Dockerfile, ahora construyamos la imagen:
 
 ```bash
 # el punto (.) al final indica que en el directorio actual está el Dockerfile con el que haremos el build.
-docker build --tag tour-of-heroes-api-i .
+docker build --tag $IMAGE_NAME --build-arg PASS_DB=${MY_PASS_DB} \ 
+--build-arg USER_DB=${MY_USER_DB} --build-arg HOST_DB=${MY_HOST_DB} .
 ```
 
 Finalmente podemos iniciar nuestro contenedor:
 
 ```bash
-docker run -e PASS_DB=${MY_PASS_DB} -e USER_DB=${MY_USER_DB} -e HOST_DB=${MY_HOST_DB} \
---name tour-of-heroes-api-i-con -d -p 8080:8080 tour-of-heroes-api-i:latest
+docker run --name tour-of-heroes-api-i-con -d -p 8080:8080 tour-of-heroes-api-i:latest
 ```
 
 Note que al contenedor le paso unas variables de entorno que está definidas como variables de entorno del sistema 
@@ -115,7 +117,7 @@ fi
 
 
 # construimos la imagen con el Dockerfile
-docker build --tag $IMAGE_NAME .
+docker build --tag $IMAGE_NAME --build-arg PASS_DB=${MY_PASS_DB} --build-arg USER_DB=${MY_USER_DB} --build-arg HOST_DB=${MY_HOST_DB} .
 ```
 
 podemos ejecutar:
@@ -131,8 +133,7 @@ Ahora, para iniciar nuestro contenedor nos apoyamos en el archivo utilitario:
 
 que contiene: 
 ```bash
-docker run -e PASS_DB=${MY_PASS_DB} -e USER_DB=${MY_USER_DB} -e HOST_DB=${MY_HOST_DB} \
---name tour-of-heroes-api-i-con -d -p 8080:8080 tour-of-heroes-api-i:latest
+docker run --name tour-of-heroes-api-i-con -d -p 8080:8080 tour-of-heroes-api-i:latest
 ```
 
 podemos ejecutar:
@@ -143,6 +144,40 @@ sh ./scripts/docker-start.sh
 
 ## Configurar AWS ECS<a name="id3"></a>
 
+Se asume que ya tenemos cuenta en AWS
+
+### Paso 1: Crear nuestro repo en ECR
+```
+todo
+```
+### Paso 2: Crear task en ECS
+```
+todo
+```
+### Paso 3: Crear Cluster en ECS
+```
+todo
+```
+### Paso 4: Crear service en ECS
+```
+todo
+```
 ## Configurar IAM<a name="id4"></a>
 
+### Paso 1: Crear usuario en IAM con permisos especificos
+```
+todo
+```
+
 ## Github actions<a name="id5"></a>
+
+### Paso 1: Configurar secrets
+```
+todo
+```
+
+### Paso 2: Configurar workflow de despliegue en ECS
+```
+todo
+```
+
